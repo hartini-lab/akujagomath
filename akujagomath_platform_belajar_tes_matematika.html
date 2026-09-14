@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AkuJagoMath - Platform Belajar & Tes Matematika Seru</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 50%, #06b6d4 100%); }
+        .card-shadow { box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.1), 0 8px 10px -6px rgba(59, 130, 246, 0.1); }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <nav class="gradient-bg text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchMenu('beranda')">
+                    <div class="bg-white text-indigo-600 p-2.5 rounded-2xl shadow-md font-extrabold text-2xl flex items-center justify-center w-12 h-12">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-extrabold tracking-wider">Aku<span class="text-amber-300">Jago</span>Math</span>
+                        <p class="text-xs text-indigo-100 font-medium">Belajar & Uji Kemampuan Matematika</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav Menu -->
+                <div class="hidden lg:flex items-center space-x-1">
+                    <button onclick="switchMenu('beranda')" id="nav-beranda" class="nav-btn px-3.5 py-2 rounded-xl text-sm font-semibold transition bg-white/20 shadow-inner">Beranda</button>
+                    <button onclick="switchMenu('sumber')" id="nav-sumber" class="nav-btn px-3.5 py-2 rounded-xl text-sm font-semibold transition hover:bg-white/10">Sumber Belajar</button>
+                    <button onclick="switchMenu('tes')" id="nav-tes" class="nav-btn px-3.5 py-2 rounded-xl text-sm font-semibold transition hover:bg-white/10">Tes Kemampuan</button>
+                    <button onclick="switchMenu('laporan')" id="nav-laporan" class="nav-btn px-3.5 py-2 rounded-xl text-sm font-semibold transition hover:bg-white/10">Laporan Hasil</button>
+                    <button onclick="switchMenu('refleksi')" id="nav-refleksi" class="nav-btn px-3.5 py-2 rounded-xl text-sm font-semibold transition hover:bg-white/10">Refleksi</button>
+                    <button onclick="switchMenu('apresiasi')" id="nav-apresiasi" class="nav-btn px-3.5 py-2 rounded-xl text-sm font-semibold transition hover:bg-white/10">Ruang Apresiasi</button>
+                </div>
+
+                <!-- User Session & Logout / Teacher Badge -->
+                <div class="flex items-center space-x-3">
+                    <div id="auth-status-badge" class="hidden sm:flex items-center bg-white/10 px-3 py-1.5 rounded-full text-xs font-medium border border-white/20">
+                        <i class="fa-solid fa-user-circle mr-1.5 text-amber-300 text-sm"></i>
+                        <span id="badge-name">Belum Login</span>
+                    </div>
+                    <button id="logout-btn" onclick="logoutUser()" class="hidden bg-rose-500 hover:bg-rose-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition shadow">
+                        <i class="fa-solid fa-right-from-bracket mr-1"></i> Keluar
+                    </button>
+                    <!-- Mobile Hamburger -->
+                    <button onclick="toggleMobileMenu()" class="lg:hidden text-white p-2 focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-indigo-900 border-t border-indigo-800 px-4 pt-2 pb-4 space-y-1">
+            <button onclick="switchMenu('beranda'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg text-sm font-medium hover:bg-indigo-800">Beranda</button>
+            <button onclick="switchMenu('sumber'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg text-sm font-medium hover:bg-indigo-800">Sumber Belajar</button>
+            <button onclick="switchMenu('tes'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg text-sm font-medium hover:bg-indigo-800">Tes Kemampuan</button>
+            <button onclick="switchMenu('laporan'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg text-sm font-medium hover:bg-indigo-800">Laporan Hasil</button>
+            <button onclick="switchMenu('refleksi'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg text-sm font-medium hover:bg-indigo-800">Refleksi</button>
+            <button onclick="switchMenu('apresiasi'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg text-sm font-medium hover:bg-indigo-800">Ruang Apresiasi</button>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ================= 1. MENU BERANDA ================= -->
+        <section id="menu-beranda" class="space-y-8">
+            <div class="bg-white rounded-3xl p-6 sm:p-10 card-shadow border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="space-y-4 max-w-2xl">
+                    <span class="bg-indigo-100 text-indigo-700 text-xs font-bold px-3.5 py-1.5 rounded-full uppercase tracking-wider">Selamat Datang di AkuJagoMath</span>
+                    <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-tight">Jago Matematika dengan Cara Seru & Berjenjang!</h1>
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
+                        Platform interaktif untuk menguasai Penjumlahan, Pengurangan, Perkalian, Pembagian, dan Operasi Hitung Campuran. Daftar biodata Anda atau masuk sebagai Guru untuk memantau hasil tes siswa.
+                    </p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <button onclick="switchMenu('tes')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3 rounded-2xl shadow-lg transition flex items-center gap-2">
+                            <i class="fa-solid fa-play"></i> Mulai Tes Sekarang
+                        </button>
+                        <button onclick="switchMenu('sumber')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-6 py-3 rounded-2xl transition flex items-center gap-2">
+                            <i class="fa-solid fa-book-open"></i> Lihat Sumber Belajar
+                        </button>
+                    </div>
+                </div>
+                <div class="w-full md:w-80 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-3xl p-6 text-white shadow-xl text-center flex flex-col justify-center items-center">
+                    <div class="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center text-4xl mb-4">
+                        <i class="fa-solid fa-award text-amber-300"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-1">Status Sesi Anda</h3>
+                    <p class="text-xs text-indigo-100 mb-4">Kelola sesi masuk dan daftar peserta Anda.</p>
+                    <div id="beranda-user-status" class="w-full bg-white/10 rounded-xl p-3 text-xs font-medium border border-white/20 mb-3">
+                        Status: Belum Terdaftar
+                    </div>
+                    <div id="beranda-logout-container" class="hidden w-full">
+                        <button onclick="logoutUser()" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-2 rounded-xl text-xs transition">
+                            Keluar (Logout)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Two Column Form & Teacher Login -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Biodata Peserta Form -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 card-shadow border border-slate-100">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center font-bold text-lg">
+                            <i class="fa-solid fa-user-pen"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-900">Formulir Biodata Peserta</h2>
+                            <p class="text-xs text-slate-500">Wajib diisi agar dapat mengerjakan tes kemampuan.</p>
+                        </div>
+                    </div>
+
+                    <form id="biodata-form" onsubmit="handleBiodataSubmit(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Nama Lengkap Siswa</label>
+                            <input type="text" id="siswa-nama" required placeholder="Contoh: Budi Santoso" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm bg-slate-50">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Kelas</label>
+                            <input type="text" id="siswa-kelas" required placeholder="Contoh: Kelas 5 SD" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm bg-slate-50">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Nomor HP Orang Tua (WhatsApp)</label>
+                            <input type="tel" id="siswa-hp" required placeholder="Contoh: 081234567890" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm bg-slate-50">
+                        </div>
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-floppy-disk"></i> Simpan & Mulai Belajar/Tes
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Teacher Login Panel (Password hidden hint: gurumerdeka) -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 card-shadow border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div class="w-10 h-10 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center font-bold text-lg">
+                                <i class="fa-solid fa-chalkboard-user"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-slate-900">Login Khusus Guru</h2>
+                                <p class="text-xs text-slate-500">Pantau hasil tes seluruh siswa & kelola data.</p>
+                            </div>
+                        </div>
+
+                        <form id="teacher-login-form" onsubmit="handleTeacherLogin(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Password Guru</label>
+                                <div class="relative">
+                                    <input type="password" id="teacher-password" required placeholder="Masukkan password guru..." class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-amber-500 focus:outline-none text-sm bg-slate-50 pr-10">
+                                    <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-3.5 text-slate-400 hover:text-slate-600">
+                                        <i id="eye-icon" class="fa-solid fa-eye-slash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3.5 rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-right-to-bracket"></i> Masuk Dashboard Guru
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="mt-6 pt-6 border-t border-slate-100 bg-slate-50 p-4 rounded-2xl">
+                        <h4 class="font-bold text-xs text-slate-700 uppercase mb-1 flex items-center gap-1.5">
+                            <i class="fa-solid fa-circle-info text-indigo-500"></i> Informasi Hak Akses Guru
+                        </h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Guru berhak melihat rekapitulasi nilai seluruh siswa, memantau level yang telah diselesaikan, serta mereset atau menghapus data siswa jika diperlukan.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 2. MENU SUMBER BELAJAR ================= -->
+        <section id="menu-sumber" class="hidden space-y-6">
+            <div class="bg-gradient-to-r from-indigo-600 to-blue-600 rounded-3xl p-6 sm:p-8 text-white shadow-xl">
+                <span class="bg-white/25 text-white text-xs font-bold px-3 py-1 rounded-full uppercase">Pusat Belajar</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold mt-2">Sumber Belajar Matematika</h2>
+                <p class="text-indigo-100 text-sm mt-1">Pilih materi di bawah ini untuk mempelajari konsep penjumlahan, pengurangan, perkalian, pembagian, dan operasi hitung campuran sebelum mengikuti tes.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-white rounded-3xl p-6 card-shadow border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center text-xl font-bold mb-4">
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900 mb-2">Penjumlahan & Pengurangan</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed mb-4">Pelajari teknik dasar menyimpan dan meminjam angka dengan cepat serta latihan soal cerita sehari-hari.</p>
+                    </div>
+                    <div class="space-y-2">
+                        <a href="https://www.youtube.com/results?search_query=belajar+penjumlahan+dan+pengurangan+sd" target="_blank" class="w-full bg-rose-50 text-rose-600 hover:bg-rose-100 font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition">
+                            <i class="fa-brands fa-youtube text-base"></i> Video YouTube Terkait
+                        </a>
+                        <a href="https://www.mathsisfun.com/numbers/addition.html" target="_blank" class="w-full bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition">
+                            <i class="fa-solid fa-globe"></i> Artikel Website Belajar
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-white rounded-3xl p-6 card-shadow border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-xl font-bold mb-4">
+                            <i class="fa-solid fa-xmark"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900 mb-2">Perkalian Bilangan</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed mb-4">Memahami konsep perkalian sebagai penjumlahan berulang serta trik menghafal tabel perkalian 1 sampai 10.</p>
+                    </div>
+                    <div class="space-y-2">
+                        <a href="https://www.youtube.com/results?search_query=belajar+perkalian+sd" target="_blank" class="w-full bg-rose-50 text-rose-600 hover:bg-rose-100 font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition">
+                            <i class="fa-brands fa-youtube text-base"></i> Video YouTube Terkait
+                        </a>
+                        <a href="https://www.mathsisfun.com/tables.html" target="_blank" class="w-full bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition">
+                            <i class="fa-solid fa-globe"></i> Artikel Website Belajar
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-white rounded-3xl p-6 card-shadow border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-teal-50 text-teal-600 rounded-2xl flex items-center justify-center text-xl font-bold mb-4">
+                            <i class="fa-solid fa-divide"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900 mb-2">Pembagian Matematika</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed mb-4">Belajar metode pembagian bersusun (porogapit) dengan mudah dan pahami konsep sisa pembagian.</p>
+                    </div>
+                    <div class="space-y-2">
+                        <a href="https://www.youtube.com/results?search_query=belajar+pembagian+porogapit+sd" target="_blank" class="w-full bg-rose-50 text-rose-600 hover:bg-rose-100 font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition">
+                            <i class="fa-brands fa-youtube text-base"></i> Video YouTube Terkait
+                        </a>
+                        <a href="https://www.mathsisfun.com/long-division.html" target="_blank" class="w-full bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition">
+                            <i class="fa-solid fa-globe"></i> Artikel Website Belajar
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="bg-white rounded-3xl p-6 card-shadow border border-slate-100 flex flex-col justify-between md:col-span-2 lg:col-span-3">
+                    <div>
+                        <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-xl font-bold mb-4">
+                            <i class="fa-solid fa-calculator"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900 mb-2">Operasi Hitung Campuran (Kabataku)</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed mb-4">Kuasai urutan pengerjaan operasi hitung: Kurung dikerjakan dahulu, disusul perkalian/pembagian, baru kemudian penjumlahan/pengurangan.</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <a href="https://www.youtube.com/results?search_query=operasi+hitung+campuran+sd" target="_blank" class="bg-rose-50 text-rose-600 hover:bg-rose-100 font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition">
+                            <i class="fa-brands fa-youtube text-base"></i> Tonton Video Pembahasan Kabataku
+                        </a>
+                        <a href="https://www.mathsisfun.com/operation-order-pemdas.html" target="_blank" class="bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition">
+                            <i class="fa-solid fa-globe"></i> Baca Penjelasan Urutan Operasi (PEMDAS)
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 3. MENU TES KEMAMPUAN ================= -->
+        <section id="menu-tes" class="hidden space-y-6">
+            <div id="tes-gate" class="bg-white rounded-3xl p-8 card-shadow border border-slate-100 text-center max-w-xl mx-auto">
+                <div class="w-16 h-16 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-900 mb-2">Biodata Belum Diisi!</h2>
+                <p class="text-slate-500 text-sm mb-6">Anda harus mengisi formulir biodata peserta terlebih dahulu di menu <b>Beranda</b> sebelum dapat mengakses tes kemampuan.</p>
+                <button onclick="switchMenu('beranda')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3 rounded-xl text-sm shadow transition">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke Beranda
+                </button>
+            </div>
+
+            <div id="tes-container" class="hidden space-y-6">
+                <!-- Level Selection Header (5 Levels) -->
+                <div class="bg-white rounded-3xl p-6 card-shadow border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div>
+                        <span class="text-xs font-bold text-indigo-600 uppercase">Pilih Tingkat Kesulitan</span>
+                        <h2 class="text-2xl font-extrabold text-slate-900">Uji Kemampuan Matematika 5 Level</h2>
+                        <p class="text-xs text-slate-500 mt-1">Tes dapat dilakukan berulang kali dengan soal dinamis yang berbeda setiap sesi.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="selectLevel(1)" id="btn-lvl-1" class="px-4 py-2.5 rounded-xl font-bold text-xs bg-indigo-600 text-white shadow">Level 1 (Mudah)</button>
+                        <button onclick="selectLevel(2)" id="btn-lvl-2" class="px-4 py-2.5 rounded-xl font-bold text-xs bg-slate-100 text-slate-700 hover:bg-slate-200">Level 2</button>
+                        <button onclick="selectLevel(3)" id="btn-lvl-3" class="px-4 py-2.5 rounded-xl font-bold text-xs bg-slate-100 text-slate-700 hover:bg-slate-200">Level 3</button>
+                        <button onclick="selectLevel(4)" id="btn-lvl-4" class="px-4 py-2.5 rounded-xl font-bold text-xs bg-slate-100 text-slate-700 hover:bg-slate-200">Level 4</button>
+                        <button onclick="selectLevel(5)" id="btn-lvl-5" class="px-4 py-2.5 rounded-xl font-bold text-xs bg-slate-100 text-slate-700 hover:bg-slate-200">Level 5 (Susah)</button>
+                    </div>
+                </div>
+
+                <!-- Quiz Box -->
+                <div id="quiz-box" class="bg-white rounded-3xl p-6 sm:p-8 card-shadow border border-slate-100">
+                    <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
+                        <div>
+                            <span id="quiz-level-badge" class="bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full">Level 1: Penjumlahan & Pengurangan Dasar</span>
+                            <h3 id="quiz-progress-text" class="text-sm font-semibold text-slate-600 mt-2">Soal 1 dari 10</h3>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs text-slate-400 block">Siswa Aktif</span>
+                            <span id="quiz-active-name" class="font-bold text-sm text-indigo-600">-</span>
+                        </div>
+                    </div>
+
+                    <div id="question-area" class="space-y-6">
+                        <div class="text-center py-8">
+                            <h2 id="question-text" class="text-3xl sm:text-4xl font-extrabold text-slate-800 mb-6">5 + 3 = ?</h2>
+                            <div class="max-w-xs mx-auto">
+                                <input type="number" id="answer-input" placeholder="Masukkan jawaban..." class="w-full text-center px-4 py-3.5 rounded-2xl border-2 border-indigo-200 focus:border-indigo-600 focus:outline-none text-xl font-bold bg-slate-50">
+                            </div>
+                        </div>
+                        <div class="flex justify-end">
+                            <button onclick="submitAnswer()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg transition flex items-center gap-2">
+                                Selanjutnya <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Result Card (Hidden Initially) -->
+                    <div id="quiz-result-card" class="hidden text-center py-8 space-y-6">
+                        <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-3xl flex items-center justify-center text-3xl mx-auto shadow-inner">
+                            <i class="fa-solid fa-trophy"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-slate-900">Tes Selesai!</h2>
+                            <p class="text-slate-500 text-sm mt-1">Hasil kerja Anda telah tersimpan dan disinkronkan ke sistem laporan.</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 max-w-sm mx-auto bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                            <div>
+                                <span class="text-xs text-slate-400 block">Skor Akhir</span>
+                                <span id="final-score" class="text-3xl font-extrabold text-indigo-600">100</span>
+                            </div>
+                            <div>
+                                <span class="text-xs text-slate-400 block">Jawaban Benar</span>
+                                <span id="final-correct" class="text-3xl font-extrabold text-emerald-600">10/10</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-center gap-3">
+                            <button onclick="restartQuiz()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3 rounded-xl text-sm shadow transition">
+                                <i class="fa-solid fa-rotate-right mr-2"></i> Ulangi Tes Ini
+                            </button>
+                            <button onclick="switchMenu('laporan')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-6 py-3 rounded-xl text-sm transition">
+                                <i class="fa-solid fa-chart-line mr-2"></i> Lihat Laporan Hasil
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 4. MENU LAPORAN HASIL TES ================= -->
+        <section id="menu-laporan" class="hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 card-shadow border border-slate-100">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 pb-4 border-b border-slate-100">
+                    <div>
+                        <span class="bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full uppercase">Privasi Hasil Tes</span>
+                        <h2 class="text-2xl font-extrabold text-slate-900 mt-2">Laporan Hasil Tes Siswa</h2>
+                        <p class="text-xs text-slate-500 mt-1">Masukkan Nomor HP WhatsApp sesuai biodata untuk melihat laporan pribadi Anda.</p>
+                    </div>
+                    <div class="w-full md:w-auto flex items-center gap-2">
+                        <input type="tel" id="search-hp-input" placeholder="Masukkan No HP Orang Tua..." class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <button onclick="filterMyReport()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-2.5 rounded-xl text-sm shadow transition">
+                            Cari Laporan
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Student Report View -->
+                <div id="student-report-view">
+                    <div id="no-report-alert" class="text-center py-12 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                        <i class="fa-solid fa-folder-open text-4xl text-slate-300 mb-3"></i>
+                        <h4 class="font-bold text-slate-700 text-base">Masukkan No HP untuk Melihat Laporan</h4>
+                        <p class="text-xs text-slate-500 mt-1 max-w-sm mx-auto">Sistem menjaga privasi peserta. Anda hanya dapat melihat laporan hasil tes diri sendiri.</p>
+                    </div>
+                    <div id="report-result-card" class="hidden space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-indigo-50 p-5 rounded-2xl border border-indigo-100">
+                                <span class="text-xs text-indigo-500 font-bold uppercase">Nama Siswa</span>
+                                <h3 id="rep-name" class="text-lg font-extrabold text-slate-900 mt-1">-</h3>
+                                <p id="rep-class" class="text-xs text-slate-500 mt-0.5">-</p>
+                            </div>
+                            <div class="bg-blue-50 p-5 rounded-2xl border border-blue-100">
+                                <span class="text-xs text-blue-500 font-bold uppercase">Kontak Orang Tua</span>
+                                <h3 id="rep-phone" class="text-lg font-extrabold text-slate-900 mt-1">-</h3>
+                                <p class="text-xs text-slate-500 mt-0.5">Terverifikasi WhatsApp</p>
+                            </div>
+                            <div class="bg-emerald-50 p-5 rounded-2xl border border-emerald-100 flex items-center justify-between">
+                                <div>
+                                    <span class="text-xs text-emerald-600 font-bold uppercase">Skor Tertinggi</span>
+                                    <h3 id="rep-score" class="text-2xl font-extrabold text-slate-900 mt-1">0</h3>
+                                    <p id="rep-level" class="text-xs text-slate-500 mt-0.5">-</p>
+                                </div>
+                                <div class="w-12 h-12 bg-emerald-500 text-white rounded-2xl flex items-center justify-center text-xl shadow">
+                                    <i class="fa-solid fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end gap-3 pt-2">
+                            <button onclick="sendReportToWhatsApp()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-3 rounded-xl text-sm shadow flex items-center gap-2 transition">
+                                <i class="fa-brands fa-whatsapp text-lg"></i> Kirim Laporan via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Teacher Dashboard View (Hidden by default unless logged in as guru) -->
+                <div id="teacher-dashboard-view" class="hidden mt-8 pt-8 border-t border-slate-200 space-y-6">
+                    <div class="flex justify-between items-center bg-amber-50 p-4 rounded-2xl border border-amber-200">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-amber-500 text-white rounded-xl flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-user-shield"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm">Panel Khusus Guru (Mode Aktif)</h4>
+                                <p class="text-xs text-slate-600">Memantau seluruh hasil tes siswa, mereset skor, atau menghapus akses siswa.</p>
+                            </div>
+                        </div>
+                        <button onclick="logoutTeacher()" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold px-4 py-2 rounded-xl">
+                            Keluar Mode Guru
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="bg-slate-100 text-slate-700 uppercase text-[11px] font-bold">
+                                    <th class="p-3.5 rounded-l-xl">No</th>
+                                    <th class="p-3.5">Nama Siswa</th>
+                                    <th class="p-3.5">Kelas</th>
+                                    <th class="p-3.5">No HP Orang Tua</th>
+                                    <th class="p-3.5">Level Terakhir</th>
+                                    <th class="p-3.5">Skor Terbaik</th>
+                                    <th class="p-3.5 text-center rounded-r-xl">Aksi Guru</th>
+                                </tr>
+                            </thead>
+                            <tbody id="teacher-student-table-body" class="divide-y divide-slate-100 text-xs">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 5. MENU REFLEKSI ================= -->
+        <section id="menu-refleksi" class="hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 card-shadow border border-slate-100">
+                <div class="max-w-xl mb-6">
+                    <span class="bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full uppercase">Refleksi Belajar</span>
+                    <h2 class="text-2xl font-extrabold text-slate-900 mt-2">Tuliskan Refleksi Anda</h2>
+                    <p class="text-xs text-slate-500 mt-1">Siswa atau Orang Tua dapat menuliskan kesan, kendala, atau masukan terkait pembelajaran matematika di aplikasi ini.</p>
+                </div>
+
+                <form id="refleksi-form" onsubmit="handleRefleksiSubmit(event)" class="space-y-4 max-w-2xl">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Nama Pengirim</label>
+                            <input type="text" id="ref-nama" required placeholder="Nama Siswa / Orang Tua..." class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Sebagai</label>
+                            <select id="ref-role" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <option value="Siswa">Siswa</option>
+                                <option value="Orang Tua">Orang Tua / Wali</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Pesan Refleksi / Masukan</label>
+                        <textarea id="ref-pesan" required rows="4" placeholder="Tuliskan pengalaman belajar matematika di sini..." class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                    </div>
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3 rounded-xl text-sm shadow transition flex items-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i> Kirim Refleksi
+                    </button>
+                </form>
+
+                <div class="mt-10 pt-8 border-t border-slate-100">
+                    <h3 class="font-bold text-base text-slate-900 mb-4">Daftar Refleksi Terbaru</h3>
+                    <div id="refleksi-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 6. MENU RUANG APRESIASI ================= -->
+        <section id="menu-apresiasi" class="hidden space-y-6">
+            <div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-3xl p-6 sm:p-8 text-white shadow-xl text-center">
+                <span class="bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full uppercase">Papan Prestasi</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold mt-2">Ruang Apresiasi Top 3 Siswa</h2>
+                <p class="text-amber-100 text-sm mt-1">Menampilkan 3 nama dengan nilai tertinggi dari seluruh siswa yang mendaftar di aplikasi ini secara real-time.</p>
+            </div>
+
+            <div id="top3-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Populated dynamically -->
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 mt-12 py-6 text-center text-xs text-slate-500">
+        <p>&copy; 2026 AkuJagoMath. Platform Belajar & Uji Kemampuan Matematika Nusantara.</p>
+    </footer>
+
+    <!-- Custom Modal / Message Box (No alert() used) -->
+    <div id="custom-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full card-shadow text-center space-y-4">
+            <div id="modal-icon" class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center text-2xl mx-auto">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h3 id="modal-title" class="text-xl font-bold text-slate-900">Notifikasi</h3>
+            <p id="modal-message" class="text-slate-500 text-sm">Pesan informasi sistem.</p>
+            <button onclick="closeModal()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl text-sm shadow transition">
+                Mengerti
+            </button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, getDoc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'akujagomath-prod-2026';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { apiKey: "demo", projectId: "demo" };
+
+        let app, db, auth;
+        let isFirebaseActive = false;
+
+        let appState = {
+            currentUser: null, // { nama, kelas, hp }
+            isTeacher: false,
+            students: [], // [{ nama, kelas, hp, score, level }]
+            reflections: [
+                { nama: "Siti Rahma", role: "Siswa", pesan: "Belajar perkalian jadi lebih mudah dengan latihan berjenjang!" },
+                { nama: "Bapak Joko (Orang Tua)", role: "Orang Tua", pesan: "Aplikasi yang sangat membantu anak saya menguasai hitung campuran." }
+            ]
+        };
+
+        let currentQuiz = {
+            level: 1,
+            questions: [],
+            currentIndex: 0,
+            score: 0,
+            correctCount: 0
+        };
+
+        window.onload = async function() {
+            try {
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                isFirebaseActive = true;
+                initCloudSync();
+            } catch (err) {
+                console.log("Running in local storage fallback mode:", err);
+                loadLocalStorageState();
+                finalizeInit();
+            }
+        };
+
+        function initCloudSync() {
+            if (!db) return;
+            const docRef = doc(db, 'artifacts', appId, 'data', 'main_state');
+            onSnapshot(docRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.data();
+                    if (data && data.students) {
+                        appState.students = data.students;
+                    }
+                    if (data && data.reflections) {
+                        appState.reflections = data.reflections;
+                    }
+                } else {
+                    saveCloudState();
+                }
+                loadLocalSession();
+                finalizeInit();
+            }, (error) => {
+                console.log("Sync error fallback:", error);
+                loadLocalStorageState();
+                finalizeInit();
+            });
+        }
+
+        function saveCloudState() {
+            if (!isFirebaseActive || !db) {
+                localStorage.setItem('akujagomath_state_fallback', JSON.stringify(appState));
+                return;
+            }
+            const docRef = doc(db, 'artifacts', appId, 'data', 'main_state');
+            setDoc(docRef, {
+                students: appState.students,
+                reflections: appState.reflections
+            }, { merge: true }).catch(err => console.log("Save error:", err));
+        }
+
+        function loadLocalStorageState() {
+            const saved = localStorage.getItem('akujagomath_state_fallback');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    appState.students = parsed.students || [];
+                    appState.reflections = parsed.reflections || appState.reflections;
+                } catch(e) {}
+            }
+            loadLocalSession();
+        }
+
+        function saveLocalSession() {
+            localStorage.setItem('akujagomath_session', JSON.stringify({
+                currentUser: appState.currentUser,
+                isTeacher: appState.isTeacher
+            }));
+        }
+
+        function loadLocalSession() {
+            const sess = localStorage.getItem('akujagomath_session');
+            if (sess) {
+                try {
+                    const parsed = JSON.parse(sess);
+                    appState.currentUser = parsed.currentUser || null;
+                    appState.isTeacher = parsed.isTeacher || false;
+                } catch(e) {}
+            }
+        }
+
+        function finalizeInit() {
+            updateAuthUI();
+            renderReflections();
+            renderTop3();
+            checkQuizGate();
+        }
+
+        // Global exposed helper functions
+        window.switchMenu = function(menuId) {
+            const menus = ['beranda', 'sumber', 'tes', 'laporan', 'refleksi', 'apresiasi'];
+            menus.forEach(m => {
+                const el = document.getElementById(`menu-${m}`);
+                if (el) el.classList.add('hidden');
+                const btn = document.getElementById(`nav-${m}`);
+                if (btn) {
+                    btn.classList.remove('bg-white/20', 'shadow-inner');
+                    btn.classList.add('hover:bg-white/10');
+                }
+            });
+
+            const targetMenu = document.getElementById(`menu-${menuId}`);
+            if (targetMenu) targetMenu.classList.remove('hidden');
+            const activeBtn = document.getElementById(`nav-${menuId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-white/20', 'shadow-inner');
+                activeBtn.classList.remove('hover:bg-white/10');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (menuId === 'laporan') {
+                if (appState.isTeacher) {
+                    document.getElementById('teacher-dashboard-view').classList.remove('hidden');
+                    renderTeacherTable();
+                } else {
+                    document.getElementById('teacher-dashboard-view').classList.add('hidden');
+                    if (appState.currentUser) {
+                        document.getElementById('search-hp-input').value = appState.currentUser.hp;
+                        window.filterMyReport();
+                    } else {
+                        document.getElementById('search-hp-input').value = "";
+                        document.getElementById('no-report-alert').classList.remove('hidden');
+                        document.getElementById('report-result-card').classList.add('hidden');
+                    }
+                }
+            }
+            if (menuId === 'tes') {
+                checkQuizGate();
+            }
+            if (menuId === 'apresiasi') {
+                renderTop3();
+            }
+        };
+
+        window.toggleMobileMenu = function() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu) menu.classList.toggle('hidden');
+        };
+
+        window.showModal = function(title, message, isSuccess = true) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+            const iconDiv = document.getElementById('modal-icon');
+            if (isSuccess) {
+                iconDiv.className = "w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-2xl mx-auto";
+                iconDiv.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+            } else {
+                iconDiv.className = "w-16 h-16 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-2xl mx-auto";
+                iconDiv.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i>';
+            }
+            document.getElementById('custom-modal').classList.remove('hidden');
+            document.getElementById('custom-modal').classList.add('flex');
+        };
+
+        window.closeModal = function() {
+            document.getElementById('custom-modal').classList.remove('flex');
+            document.getElementById('custom-modal').classList.add('hidden');
+        };
+
+        // 1. Beranda & Biodata Handling
+        window.handleBiodataSubmit = function(e) {
+            e.preventDefault();
+            const nama = document.getElementById('siswa-nama').value.trim();
+            const kelas = document.getElementById('siswa-kelas').value.trim();
+            const hp = document.getElementById('siswa-hp').value.trim();
+
+            appState.currentUser = { nama, kelas, hp };
+            appState.isTeacher = false;
+            
+            let existing = appState.students.find(s => s.hp === hp);
+            if (!existing) {
+                appState.students.push({ nama, kelas, hp, score: 0, level: 1 });
+            } else {
+                existing.nama = nama;
+                existing.kelas = kelas;
+            }
+            saveCloudState();
+            saveLocalSession();
+            updateAuthUI();
+            showModal("Berhasil Terdaftar!", `Selamat datang ${nama}! Biodata Anda telah tersimpan. Sekarang Anda bisa mengakses Menu Tes Kemampuan.`);
+            window.switchMenu('tes');
+        };
+
+        window.togglePasswordVisibility = function() {
+            const passInput = document.getElementById('teacher-password');
+            const eyeIcon = document.getElementById('eye-icon');
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                eyeIcon.className = "fa-solid fa-eye";
+            } else {
+                passInput.type = 'password';
+                eyeIcon.className = "fa-solid fa-eye-slash";
+            }
+        };
+
+        window.handleTeacherLogin = function(e) {
+            e.preventDefault();
+            const pass = document.getElementById('teacher-password').value.trim();
+            if (pass === 'gurumerdeka') {
+                appState.isTeacher = true;
+                appState.currentUser = null;
+                saveLocalSession();
+                updateAuthUI();
+                showModal("Login Guru Berhasil!", "Anda masuk sebagai Guru. Mengarahkan ke Laporan Hasil Tes semua siswa...");
+                window.switchMenu('laporan');
+            } else {
+                showModal("Password Salah", "Password guru yang Anda masukkan tidak valid. Silakan coba lagi.", false);
+            }
+        };
+
+        window.logoutUser = function() {
+            appState.currentUser = null;
+            appState.isTeacher = false;
+            saveLocalSession();
+            updateAuthUI();
+            
+            // Clear forms on logout as requested
+            const nameInp = document.getElementById('siswa-nama');
+            const kelasInp = document.getElementById('siswa-kelas');
+            const hpInp = document.getElementById('siswa-hp');
+            const tPass = document.getElementById('teacher-password');
+            if (nameInp) nameInp.value = "";
+            if (kelasInp) kelasInp.value = "";
+            if (hpInp) hpInp.value = "";
+            if (tPass) tPass.value = "";
+
+            showModal("Keluar Sesi", "Anda telah keluar dari sesi aktif. Formulir telah dikosongkan.");
+            window.switchMenu('beranda');
+        };
+
+        window.logoutTeacher = function() {
+            appState.isTeacher = false;
+            saveLocalSession();
+            updateAuthUI();
+            const tPass = document.getElementById('teacher-password');
+            if (tPass) tPass.value = "";
+            window.switchMenu('beranda');
+        };
+
+        function updateAuthUI() {
+            const badge = document.getElementById('auth-status-badge');
+            const badgeName = document.getElementById('badge-name');
+            const logoutBtn = document.getElementById('logout-btn');
+            const berandaStatus = document.getElementById('beranda-user-status');
+            const logoutContainer = document.getElementById('beranda-logout-container');
+
+            if (appState.isTeacher) {
+                badge.classList.remove('hidden');
+                badgeName.innerText = "Guru (gurumerdeka)";
+                logoutBtn.classList.remove('hidden');
+                logoutContainer.classList.remove('hidden');
+                berandaStatus.innerHTML = `Status: <span class="text-amber-300 font-bold">Login sebagai Guru</span>`;
+            } else if (appState.currentUser) {
+                badge.classList.remove('hidden');
+                badgeName.innerText = appState.currentUser.nama;
+                logoutBtn.classList.remove('hidden');
+                logoutContainer.classList.remove('hidden');
+                berandaStatus.innerHTML = `Status: Terdaftar sebagai <span class="font-bold text-amber-300">${appState.currentUser.nama}</span>`;
+                
+                const nameInp = document.getElementById('siswa-nama');
+                const kelasInp = document.getElementById('siswa-kelas');
+                const hpInp = document.getElementById('siswa-hp');
+                if (nameInp) nameInp.value = appState.currentUser.nama;
+                if (kelasInp) kelasInp.value = appState.currentUser.kelas;
+                if (hpInp) hpInp.value = appState.currentUser.hp;
+            } else {
+                badge.classList.add('hidden');
+                logoutBtn.classList.add('hidden');
+                logoutContainer.classList.add('hidden');
+                berandaStatus.innerHTML = `Status: Belum Terdaftar / Login`;
+                
+                const nameInp = document.getElementById('siswa-nama');
+                const kelasInp = document.getElementById('siswa-kelas');
+                const hpInp = document.getElementById('siswa-hp');
+                if (nameInp) nameInp.value = "";
+                if (kelasInp) kelasInp.value = "";
+                if (hpInp) hpInp.value = "";
+            }
+        }
+
+        // 3. Tes Kemampuan & 5 Level Dinamis
+        function checkQuizGate() {
+            const gate = document.getElementById('tes-gate');
+            const container = document.getElementById('tes-container');
+            if (!appState.currentUser && !appState.isTeacher) {
+                gate.classList.remove('hidden');
+                container.classList.add('hidden');
+            } else {
+                gate.classList.add('hidden');
+                container.classList.remove('hidden');
+                if (!appState.currentUser && appState.isTeacher) {
+                    appState.currentUser = { nama: "Guru (Tamu Tes)", kelas: "Guru", hp: "0000" };
+                }
+                const activeNameEl = document.getElementById('quiz-active-name');
+                if (activeNameEl) activeNameEl.innerText = appState.currentUser.nama;
+                initQuiz(currentQuiz.level);
+            }
+        }
+
+        window.selectLevel = function(lvl) {
+            currentQuiz.level = lvl;
+            for (let i = 1; i <= 5; i++) {
+                const btn = document.getElementById(`btn-lvl-${i}`);
+                if (btn) {
+                    if (i === lvl) {
+                        btn.className = "px-4 py-2.5 rounded-xl font-bold text-xs bg-indigo-600 text-white shadow";
+                    } else {
+                        btn.className = "px-4 py-2.5 rounded-xl font-bold text-xs bg-slate-100 text-slate-700 hover:bg-slate-200";
+                    }
+                }
+            }
+            initQuiz(lvl);
+        };
+
+        function generateQuestions(level) {
+            let questions = [];
+            const levelTitles = [
+                "Level 1: Penjumlahan & Pengurangan Dasar",
+                "Level 2: Perkalian & Pembagian Sederhana",
+                "Level 3: Operasi Campuran (Kali, Bagi, Tambah, Kurang)",
+                "Level 4: Operasi Hitung Campuran Lanjutan dengan Angka Besar",
+                "Level 5: Tantangan Ahli Operasi Hitung Campuran Kompleks"
+            ];
+            const badgeEl = document.getElementById('quiz-level-badge');
+            if (badgeEl) badgeEl.innerText = levelTitles[level - 1];
+
+            for (let i = 0; i < 10; i++) {
+                let qText = "";
+                let ans = 0;
+                if (level === 1) {
+                    let a = Math.floor(Math.random() * 40) + 10;
+                    let b = Math.floor(Math.random() * 30) + 1;
+                    let isAdd = Math.random() > 0.5;
+                    qText = `${a} ${isAdd ? '+' : '-'} ${b} = ?`;
+                    ans = isAdd ? a + b : a - b;
+                } else if (level === 2) {
+                    let a = Math.floor(Math.random() * 10) + 2;
+                    let b = Math.floor(Math.random() * 10) + 2;
+                    let isMul = Math.random() > 0.5;
+                    if (isMul) {
+                        qText = `${a} × ${b} = ?`;
+                        ans = a * b;
+                    } else {
+                        let prod = a * b;
+                        qText = `${prod} ÷ ${a} = ?`;
+                        ans = b;
+                    }
+                } else if (level === 3) {
+                    let a = Math.floor(Math.random() * 12) + 2;
+                    let b = Math.floor(Math.random() * 10) + 2;
+                    let c = Math.floor(Math.random() * 20) + 5;
+                    qText = `(${a} × ${b}) + ${c} = ?`;
+                    ans = (a * b) + c;
+                } else if (level === 4) {
+                    let a = Math.floor(Math.random() * 50) + 10;
+                    let b = Math.floor(Math.random() * 10) + 2;
+                    let c = Math.floor(Math.random() * 40) + 10;
+                    qText = `${a} + (${b} × 5) - ${c} = ?`;
+                    ans = a + (b * 5) - c;
+                } else {
+                    let a = Math.floor(Math.random() * 100) + 50;
+                    let b = Math.floor(Math.random() * 20) + 5;
+                    let c = Math.floor(Math.random() * 10) + 2;
+                    qText = `(${a} - ${b}) ÷ ${c} + 15 = ?`;
+                    ans = Math.round(((a - b) / c) + 15);
+                }
+                questions.push({ text: qText, answer: ans });
+            }
+            return questions;
+        }
+
+        function initQuiz(level) {
+            currentQuiz.questions = generateQuestions(level);
+            currentQuiz.currentIndex = 0;
+            currentQuiz.score = 0;
+            currentQuiz.correctCount = 0;
+            const resCard = document.getElementById('quiz-result-card');
+            const qArea = document.getElementById('question-area');
+            if (resCard) resCard.classList.add('hidden');
+            if (qArea) qArea.classList.remove('hidden');
+            renderCurrentQuestion();
+        }
+
+        function renderCurrentQuestion() {
+            const q = currentQuiz.questions[currentQuiz.currentIndex];
+            const prog = document.getElementById('quiz-progress-text');
+            const textEl = document.getElementById('question-text');
+            const inp = document.getElementById('answer-input');
+
+            if (prog) prog.innerText = `Soal ${currentQuiz.currentIndex + 1} dari 10`;
+            if (textEl) textEl.innerText = q.text;
+            if (inp) {
+                inp.value = "";
+                inp.focus();
+            }
+        }
+
+        window.submitAnswer = function() {
+            const inp = document.getElementById('answer-input');
+            const val = inp ? inp.value.trim() : "";
+            if (val === "") {
+                window.showModal("Jawaban Kosong", "Silakan masukkan jawaban terlebih dahulu.", false);
+                return;
+            }
+            const userAns = parseFloat(val);
+            const correctAns = currentQuiz.questions[currentQuiz.currentIndex].answer;
+
+            if (userAns === correctAns) {
+                currentQuiz.correctCount++;
+            }
+
+            currentQuiz.currentIndex++;
+            if (currentQuiz.currentIndex < currentQuiz.questions.length) {
+                renderCurrentQuestion();
+            } else {
+                finishQuiz();
+            }
+        };
+
+        function finishQuiz() {
+            currentQuiz.score = currentQuiz.correctCount * 10;
+            const qArea = document.getElementById('question-area');
+            const resCard = document.getElementById('quiz-result-card');
+            if (qArea) qArea.classList.add('hidden');
+            if (resCard) resCard.classList.remove('hidden');
+
+            const scoreEl = document.getElementById('final-score');
+            const correctEl = document.getElementById('final-correct');
+            if (scoreEl) scoreEl.innerText = currentQuiz.score;
+            if (correctEl) correctEl.innerText = `${currentQuiz.correctCount}/10`;
+
+            if (appState.currentUser && appState.currentUser.hp !== "0000") {
+                let student = appState.students.find(s => s.hp === appState.currentUser.hp);
+                if (student) {
+                    if (currentQuiz.score > student.score) {
+                        student.score = currentQuiz.score;
+                        student.level = currentQuiz.level;
+                    }
+                    saveCloudState();
+                }
+            }
+        }
+
+        window.restartQuiz = function() {
+            initQuiz(currentQuiz.level);
+        };
+
+        // 4. Laporan Hasil Tes & Sinkronisasi WA (Private result security)
+        window.filterMyReport = function() {
+            const hpInputEl = document.getElementById('search-hp-input');
+            const hpInput = hpInputEl ? hpInputEl.value.trim() : "";
+            const noReport = document.getElementById('no-report-alert');
+            const reportCard = document.getElementById('report-result-card');
+
+            if (!hpInput) {
+                window.showModal("Masukkan Nomor HP", "Wajib memasukkan Nomor HP WhatsApp sesuai biodata untuk melihat laporan.", false);
+                return;
+            }
+
+            let found = appState.students.find(s => s.hp === hpInput);
+            if (found) {
+                if (noReport) noReport.classList.add('hidden');
+                if (reportCard) reportCard.classList.remove('hidden');
+                document.getElementById('rep-name').innerText = found.nama;
+                document.getElementById('rep-class').innerText = found.kelas;
+                document.getElementById('rep-phone').innerText = found.hp;
+                document.getElementById('rep-score').innerText = found.score;
+                document.getElementById('rep-level').innerText = `Level ${found.level} Tercapai`;
+            } else {
+                if (noReport) noReport.classList.remove('hidden');
+                if (reportCard) reportCard.classList.add('hidden');
+                window.showModal("Tidak Ditemukan", "Nomor HP WhatsApp tidak ditemukan dalam database peserta.", false);
+            }
+        };
+
+        window.sendReportToWhatsApp = function() {
+            const name = document.getElementById('rep-name').innerText;
+            const phone = document.getElementById('rep-phone').innerText;
+            const score = document.getElementById('rep-score').innerText;
+            const level = document.getElementById('rep-level').innerText;
+
+            const text = `Halo Orang Tua ${name},\nBerikut adalah Laporan Hasil Tes Matematika di AkuJagoMath:\n\nNama Siswa: ${name}\nSkor Terbaik: ${score}\nPencapaian: ${level}\n\nTerima kasih telah mendampingi putra/putri belajar bersama AkuJagoMath!`;
+            const encoded = encodeURIComponent(text);
+            window.open(`https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${encoded}`, '_blank');
+        };
+
+        // Teacher Table Rendering & Actions
+        function renderTeacherTable() {
+            const tbody = document.getElementById('teacher-student-table-body');
+            if (!tbody) return;
+            tbody.innerHTML = "";
+
+            if (appState.students.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-slate-400">Belum ada siswa yang mendaftar.</td></tr>`;
+                return;
+            }
+
+            appState.students.forEach((s, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition";
+                tr.innerHTML = `
+                    <td class="p-3.5 font-bold text-slate-600">${idx + 1}</td>
+                    <td class="p-3.5 font-semibold text-slate-800">${s.nama}</td>
+                    <td class="p-3.5 text-slate-600">${s.kelas}</td>
+                    <td class="p-3.5 text-slate-600">${s.hp}</td>
+                    <td class="p-3.5 text-indigo-600 font-bold">Level ${s.level}</td>
+                    <td class="p-3.5 text-emerald-600 font-extrabold">${s.score}</td>
+                    <td class="p-3.5 text-center space-x-2">
+                        <button onclick="window.resetStudentScore('${s.hp}')" class="bg-amber-100 hover:bg-amber-200 text-amber-700 font-bold px-3 py-1.5 rounded-lg text-[11px] transition" title="Reset Skor">
+                            <i class="fa-solid fa-rotate-left"></i> Reset
+                        </button>
+                        <button onclick="window.deleteStudent('${s.hp}')" class="bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold px-3 py-1.5 rounded-lg text-[11px] transition" title="Hapus Akses">
+                            <i class="fa-solid fa-trash"></i> Hapus
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.resetStudentScore = function(hp) {
+            let s = appState.students.find(item => item.hp === hp);
+            if (s) {
+                s.score = 0;
+                s.level = 1;
+                saveCloudState();
+                renderTeacherTable();
+                window.showModal("Berhasil Reset", `Skor siswa ${s.nama} telah direset ke 0.`);
+            }
+        };
+
+        window.deleteStudent = function(hp) {
+            appState.students = appState.students.filter(item => item.hp !== hp);
+            saveCloudState();
+            renderTeacherTable();
+            window.showModal("Akses Dihapus", "Data dan akses siswa telah dihapus dari sistem.");
+        };
+
+        // 5. Menu Refleksi
+        window.handleRefleksiSubmit = function(e) {
+            e.preventDefault();
+            const nama = document.getElementById('ref-nama').value.trim();
+            const role = document.getElementById('ref-role').value;
+            const pesan = document.getElementById('ref-pesan').value.trim();
+
+            appState.reflections.unshift({ nama, role, pesan });
+            saveCloudState();
+            renderReflections();
+            document.getElementById('refleksi-form').reset();
+            window.showModal("Refleksi Terkirim", "Terima kasih atas refleksi dan masukan yang Anda berikan!");
+        };
+
+        function renderReflections() {
+            const list = document.getElementById('refleksi-list');
+            if (!list) return;
+            list.innerHTML = "";
+
+            appState.reflections.forEach(ref => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-50 p-5 rounded-2xl border border-slate-100 space-y-2";
+                card.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-slate-900 text-sm">${ref.nama}</h4>
+                        <span class="bg-indigo-100 text-indigo-700 text-[10px] font-bold px-2.5 py-1 rounded-full">${ref.role}</span>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">"${ref.pesan}"</p>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        // 6. Ruang Apresiasi Top 3
+        function renderTop3() {
+            const container = document.getElementById('top3-container');
+            if (!container) return;
+            container.innerHTML = "";
+
+            let sorted = [...appState.students].sort((a, b) => b.score - a.score).slice(0, 3);
+
+            if (sorted.length === 0 || sorted.every(s => s.score === 0)) {
+                container.innerHTML = `
+                    <div class="col-span-3 text-center py-12 bg-white rounded-3xl card-shadow border border-slate-100">
+                        <i class="fa-solid fa-medal text-5xl text-slate-300 mb-3"></i>
+                        <h3 class="font-bold text-slate-700 text-lg">Bagian Ini Masih Kosong</h3>
+                        <p class="text-xs text-slate-500 mt-1">Belum ada peserta yang mengisi formulir dan menyelesaikan tes. Bagian ini akan otomatis terisi secara real-time.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const medals = [
+                { color: "from-amber-400 to-amber-600", icon: "fa-crown", title: "Juara 1" },
+                { color: "from-slate-300 to-slate-500", icon: "fa-medal", title: "Juara 2" },
+                { color: "from-amber-700 to-amber-900", icon: "fa-award", title: "Juara 3" }
+            ];
+
+            sorted.forEach((s, idx) => {
+                if (s.score === 0) return;
+                const medal = medals[idx] || medals[2];
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-3xl p-6 card-shadow border border-slate-100 text-center space-y-4";
+                card.innerHTML = `
+                    <div class="w-16 h-16 bg-gradient-to-br ${medal.color} text-white rounded-3xl flex items-center justify-center text-2xl mx-auto shadow-lg">
+                        <i class="fa-solid ${medal.icon}"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold uppercase text-slate-400 tracking-wider">${medal.title}</span>
+                        <h3 class="font-extrabold text-xl text-slate-900 mt-1">${s.nama}</h3>
+                        <p class="text-xs text-slate-500">${s.kelas}</p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 max-w-xs mx-auto flex justify-around">
+                        <div>
+                            <span class="text-[10px] text-slate-400 block uppercase font-bold">Skor Terbaik</span>
+                            <span class="text-lg font-extrabold text-indigo-600">${s.score}</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 block uppercase font-bold">Level</span>
+                            <span class="text-lg font-extrabold text-emerald-600">Level ${s.level}</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+    </script>
+</body>
+</html>
